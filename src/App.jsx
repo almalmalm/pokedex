@@ -6,37 +6,26 @@ function App() {
   const modal = useModalStore((state) => state.modal);
   const openModal = useModalStore((state) => state.openModal);
   const [pokemons, setPokemons] = useState(null);
-  const [bulb, setBulb] = useState(null);
-  console.log(modal);
+  const [text, setText] = useState('');
   useEffect(() => {
     fetch('https://pokeapi.co/api/v2/pokemon/?limit=9999')
       .then((resp) => resp.json())
       .then((pokemons) => setPokemons(pokemons.results));
   }, []);
 
-  useEffect(() => {
-    fetch('https://pokeapi.co/api/v2/pokemon/150')
-      .then((resp) => resp.json())
-      .then((pokemon) =>
-        setBulb(pokemon.sprites.other.dream_world.front_default)
-      );
-  });
-
-  const query = 'c';
-  const queque =
-    pokemons !== null
-      ? pokemons.map((pokemon) => pokemon.name.match(query))
-      : console.log('loading');
-  // console.log(pokemons);
-  console.log(queque);
-
   return (
     <div className="text-center">
       <h1>Pokedex</h1>
       <p className="text-xs">Created by Lev Kalinin with React</p>
       <p>Search for a Pokemon by name or using its National Pokedex number.</p>
-      <input type="text" className="border border-black" />
-      <button className="border border-black">Search</button>
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => {
+          setText(e.target.value);
+        }}
+        className="border border-black"
+      />
       <button
         className="border border-black"
         onClick={() => {
@@ -66,7 +55,7 @@ function App() {
             </div>
           ))
         ) : (
-          <h2>Loading...</h2>
+          <p>Loading...</p>
         )}
       </div>
     </div>
